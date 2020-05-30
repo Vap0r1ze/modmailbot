@@ -22,7 +22,7 @@ async function getLogs (threadId) {
 
   const thread = await threads.findById(threadId);
   if (! thread) return;
-  
+
   return await thread.getThreadMessages();
 }
 
@@ -43,9 +43,9 @@ function getAttachment (id, desiredFilename) {
 
 module.exports = (bot, sse) => {
   const app = express();
-  
+
   app.use(cookieParser());
-  
+
   app.get('/attachments/:id/:name', async (req, res) => {
     let [mime, attachment] = getAttachment(req.params.id, req.params.name) || [];
 
@@ -118,7 +118,7 @@ module.exports = (bot, sse) => {
           res.send('<pre>400 Bad Request</pre>');
         } else {
           res.status(500);
-          console.log(error)  
+          console.log(error)
           res.send(`<pre>500 Server Error: ${error}</pre>`);
         }
       } else {
@@ -141,11 +141,20 @@ module.exports = (bot, sse) => {
           res.redirect(`https://discordapp.com/assets/${avatar}.png`);
         }
       }
-    }); 
+    });
   });
-  
+
   app.get('/stream', sse.init);
-  
+
+  app.get('*', (req, res, next) => {
+    const dashboardPath = path.join(__dirname, '../dashboard/index.html');
+    if (fs.existsSync(dashboardPath)) {
+      res.sendFile(dashboardPath);
+    } else {
+      next();
+    }
+  });
+
   if (config.https) {
     const httpsServer = https.createServer({
       key: fs.readFileSync(config.https.privateKey, 'utf8'),

@@ -365,7 +365,7 @@ class Thread {
       ...data
     }
     await knex('thread_messages').insert(threadMessage);
-    
+
     if (sse) {
       sse.send({
         message: threadMessage
@@ -394,7 +394,7 @@ class Thread {
       console.log(`Closing thread ${this.id}`);
       await this.postToThreadChannel('Closing thread...');
     }
-    
+
     if(! author) {
       let newThread = await knex('threads')
         .where('id', this.id)
@@ -484,7 +484,7 @@ class Thread {
    * @returns {Promise<String>}
    */
   getLogUrl() {
-    return utils.getSelfUrl(`#thread/${this.id}`);
+    return utils.getSelfUrl(`thread/${this.id}`);
   }
 }
 
