@@ -30,6 +30,6 @@
     "@dyno.gg/datafactory": "^1.3.3"
   },
   "devDependencies": {
-    "eslint": "^3.9.1"
+    "eslint": "^4.18.2"
   }
 }
